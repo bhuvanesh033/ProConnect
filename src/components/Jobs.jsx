@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from '../axiosConfig';
 import styles from './Jobs.module.css';
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user); // Get user from Redux state
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -17,12 +19,18 @@ const Jobs = () => {
       }
     };
 
-    fetchJobs();
-  }, []);
+    if (user && user.userType === 'freelancer') {
+      fetchJobs(); // Fetch jobs only if the user is a freelancer
+    }
+  }, [user]);
 
   const handleBidClick = (jobId) => {
     navigate(`/jobs/${jobId}/bid`);
   };
+
+  if (user && user.userType === 'client') {
+    return <p>As a client, you do not have access to the job listings.</p>; // Message for clients
+  }
 
   return (
     <div className={styles.jobsContainer}>
