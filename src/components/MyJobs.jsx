@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './MyJobs.module.css'; // Import the CSS module
 
 const MyJobs = () => {
   const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user); // Get user from Redux store
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         const res = await axios.get('https://free-lancer-1.onrender.com/api/jobs', {
+          params: { clientId: user.id }, // Pass clientId as a query parameter
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         setJobs(res.data);
@@ -20,8 +23,10 @@ const MyJobs = () => {
       }
     };
 
-    fetchJobs();
-  }, []);
+    if (user) {
+      fetchJobs();
+    }
+  }, [user]); // Dependency on user to refetch if user changes
 
   const handleViewBids = (jobId) => {
     navigate(`/bids/${jobId}`);
