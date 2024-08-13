@@ -1,16 +1,11 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // Adjust the path as needed
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProtectedRoute = ({ element: Component, ...rest }) => {
-  const { auth } = useAuth();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  return (
-    <Route
-      {...rest}
-      element={auth ? <Component /> : <Navigate to="/login" />}
-    />
-  );
+  return isAuthenticated ? Component : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
