@@ -18,32 +18,36 @@ import AcceptedBids from './components/AcceptedBids';
 import Messages from './components/Messages';
 import Conversations from './components/Conversations';
 import ChatPage from './components/ChatPage';
+import { AuthProvider } from './redux/AuthContext'; // Adjust the path as needed
+import ProtectedRoute from './components/ProtectedRoute'; // Adjust the path as needed
 import './index.css'; // or wherever Tailwind CSS is imported
 
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<Homelayout />}>
-            <Route path="/create-job" element={<CreateJob />} />
-            <Route path="/my-jobs" element={<MyJobs />} />
-            <Route path="/my-bids" element={<ViewBids />} />
-            <Route path="/" element={<Job />} />
-            <Route path="/applied-jobs" element={<AppliedJobs />} />
-            <Route path="/jobs/:jobId/bid" element={<BidForm />} />
-            <Route path="/send-message/:jobId" element={<SendMessage />} />
-            <Route path="/bids/:jobId" element={<BidsList />} />
-            <Route path="/accepted-bids" element={<AcceptedBids />} />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/conversations" element={<Conversations />} />
-            <Route path="/post-job" element={<PostJob />} />
-            <Route path="/chat/:conversationId" element={<ChatPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<Homelayout />}>
+              <ProtectedRoute path="/create-job" element={<CreateJob />} />
+              <ProtectedRoute path="/my-jobs" element={<MyJobs />} />
+              <ProtectedRoute path="/my-bids" element={<ViewBids />} />
+              <Route path="/" element={<Job />} />
+              <ProtectedRoute path="/applied-jobs" element={<AppliedJobs />} />
+              <ProtectedRoute path="/jobs/:jobId/bid" element={<BidForm />} />
+              <ProtectedRoute path="/send-message/:jobId" element={<SendMessage />} />
+              <ProtectedRoute path="/bids/:jobId" element={<BidsList />} />
+              <ProtectedRoute path="/accepted-bids" element={<AcceptedBids />} />
+              <ProtectedRoute path="/messages" element={<Messages />} />
+              <ProtectedRoute path="/conversations" element={<Conversations />} />
+              <ProtectedRoute path="/post-job" element={<PostJob />} />
+              <ProtectedRoute path="/chat/:conversationId" element={<ChatPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </Provider>
   );
 };
