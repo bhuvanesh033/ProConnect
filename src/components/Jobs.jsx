@@ -10,6 +10,11 @@ const Jobs = () => {
   const user = useSelector((state) => state.auth.user); // Get user from Redux state
 
   useEffect(() => {
+    if (user && user.userType === 'client') {
+      navigate('/my-jobs'); // Redirect clients to the /my-jobs page
+      return; // Exit early to prevent further rendering
+    }
+
     const fetchJobs = async () => {
       try {
         const response = await axios.get('/jobs');
@@ -22,14 +27,15 @@ const Jobs = () => {
     if (user && user.userType === 'freelancer') {
       fetchJobs(); // Fetch jobs only if the user is a freelancer
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleBidClick = (jobId) => {
     navigate(`/jobs/${jobId}/bid`);
   };
 
   if (user && user.userType === 'client') {
-    return <p>As a client, you do not have access to the job listings.</p>; // Message for clients
+    // Render nothing while redirecting
+    return null;
   }
 
   return (
