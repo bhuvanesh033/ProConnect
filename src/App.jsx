@@ -18,7 +18,7 @@ import AcceptedBids from './components/AcceptedBids';
 import Messages from './components/Messages';
 import Conversations from './components/Conversations';
 import ChatPage from './components/ChatPage';
-import { AuthProvider } from './redux/AuthContext'; // Adjust the path as needed
+import { AuthProvider } from './components/AuthContext'; // Adjust the path as needed
 import ProtectedRoute from './components/ProtectedRoute'; // Adjust the path as needed
 import './index.css'; // or wherever Tailwind CSS is imported
 
